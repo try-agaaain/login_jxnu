@@ -12,27 +12,31 @@ def main(wifi_list, account, password, jxnu_url, domain):
                 if success:
                     if "jxnu_stu" in wifi_name:
                         print(f"[{get_time()}] {wifi_name} 可用，正在登录校园网...")
-                        login(account, password, jxnu_url, domain)
+                        if net_is_connected():
+                            print(f"[{get_time()}] 已成功连接网络...\n")
+                            break
+                        else:
+                            login(account, password, jxnu_url, domain)
                     else:
                         print(f"[{get_time()}] {wifi_name} 可用，测试网络是否连接...")
                     if net_is_connected():
-                        print(f"[{get_time()}] 已成功连接网络...\n\n\n")
+                        print(f"[{get_time()}] 已成功连接网络...\n")
                         break
                     else:
                         print(f"[{get_time()}] 未能成功连接网络，即将再次尝试...")
                 else:
                     print(f"[{get_time()}] {wifi_name} 不可用，即将再次尝试...")
             except Exception as err:
-                print(err)
+                print(f"[{get_time()}] 出现了如下错误，即将再次重试...\n{err}")
     else:
         time.sleep(60)
 
 if __name__ == "__main__":
-    wifi_list = ["4405-5G", "X4408-AI"]
+    wifi_list = ["jxnu_stu", "4405"]    # 本机可连接的WIFI列表
     account = "学号"
     password = "校园网密码"
-    domain = "运营商"
-    jxnu_url= "http://172.16.8.8/srun_portal_pc?ac_id=1&theme=pro"
+    domain = "运营商"   # 移动|联通|电信|校园带宽
+    jxnu_url= "http://172.16.8.8/srun_portal_pc?ac_id=1&theme=pro"  # 校园网登录地址
     print(f"[{get_time()}] 开始执行...")
     while True:
         main(wifi_list, account, password, jxnu_url, domain)

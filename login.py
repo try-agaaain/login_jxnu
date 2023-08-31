@@ -1,5 +1,3 @@
-import os
-import sys
 import time
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
@@ -34,6 +32,12 @@ def check_avaliable_browser(args):
                 return None
 
 def login(user_account, user_password, jxnu_url, domain='移动'):
+    options = webdriver.EdgeOptions()
+    args = ["--headless", "--no-proxy-server"]
+    add_args_for_options(options, args)
+    driver = webdriver.Edge(options=options)
+    driver.get(jxnu_url)
+
     domain_select = {
         '移动': '@cmcc',
         '联通': '@cucc',
@@ -42,15 +46,8 @@ def login(user_account, user_password, jxnu_url, domain='移动'):
     }
     domain_select = domain_select.get(domain)
     assert domain_select, "运行商选择错误，请重新选择！"
-    os.environ['EDGE_DRIVER'] = os.path.dirname(os.path.abspath(__file__)) + "/driver"
-    
-    options = webdriver.EdgeOptions()
-    args = ["--headless", "--no-proxy-server"]
-    add_args_for_options(options, args)
-    driver = webdriver.Edge(options=options)
-    driver.get(jxnu_url)
     domain = Select(driver.find_element("id", 'domain'))
-    domain.select_by_value('@cmcc')
+    domain.select_by_value(domain_select)
     account = driver.find_element('id', 'username')
     password = driver.find_element('id', 'password')
     submit = driver.find_element('id', 'login-account')
@@ -58,7 +55,7 @@ def login(user_account, user_password, jxnu_url, domain='移动'):
     account.send_keys(user_account)
     password.send_keys(user_password)
     submit.click()
-
+    time.sleep(1)
     driver.close()
 
 if __name__ == "__main__":
