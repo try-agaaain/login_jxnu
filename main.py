@@ -1,10 +1,10 @@
 import time
 
-from utils import net_is_connected, connect_to_wifi, get_time
+from utils import net_is_connected2, connect_to_wifi, get_time
 from login import login
 
 def main(wifi_list, account, password, jxnu_url, domain):
-    if not net_is_connected():
+    if not net_is_connected2():
         for wifi_name in wifi_list:
             try:
                 print(f"[{get_time()}] 网络已断开，尝试连接{wifi_name}...")
@@ -12,14 +12,14 @@ def main(wifi_list, account, password, jxnu_url, domain):
                 if success:
                     if "jxnu_stu" in wifi_name:
                         print(f"[{get_time()}] {wifi_name} 可用，正在登录校园网...")
-                        if net_is_connected():
+                        if net_is_connected2():
                             print(f"[{get_time()}] 已成功连接网络...\n")
                             break
                         else:
                             login(account, password, jxnu_url, domain)
                     else:
                         print(f"[{get_time()}] {wifi_name} 可用，测试网络是否连接...")
-                    if net_is_connected():
+                    if net_is_connected2():
                         print(f"[{get_time()}] 已成功连接网络...\n")
                         break
                     else:
