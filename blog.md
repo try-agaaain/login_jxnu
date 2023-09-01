@@ -36,5 +36,5 @@ tmp_profile = iface.add_network_profile(profile)
 
 关于clash tun mode，这里有一个相关视频：[【进阶•代理模式篇】看懂就能解决99%的代理问题，详解系统代理、TUN/TAP代理、真VPN代理，clash/v2ray/singbox 虚拟网卡怎么接管系统全局流量？什么是真正的VPN？看完就知道了 - YouTube](https://www.youtube.com/watch?v=qItL005LUik&t=302s)
 
-
+在第二种方式中，先尝试访问测试地址，如果访问失败，则认为网络断开了。在测试的时候遇到过一个问题：`HTTPSConnectionPool(host='baidu.com', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:1129)`。因为HTTPS是http over SSL，所以需要经过SSL认证，这里的测试地址是https://www.baidu.com，在没有网络的情况下访问可能会出现这个错误，于是将测试地址改为了http://example.com。但不确定是否解决了这个问题，后面这个问题自己消失了（有时候要复现一个问题也挺麻烦的），就没去管了。
 

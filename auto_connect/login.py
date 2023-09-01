@@ -4,6 +4,8 @@ from selenium.webdriver.support.ui import Select
 from selenium import webdriver
 from selenium import webdriver
 
+from auto_connect.utils import debug
+
 def add_args_for_options(options, args):
     for arg in args:
         options.add_argument(arg)
@@ -32,31 +34,36 @@ def check_avaliable_browser(args):
                 return None
 
 def login(user_account, user_password, jxnu_url, domain='移动'):
-    options = webdriver.EdgeOptions()
-    args = ["--headless", "--no-proxy-server"]
-    add_args_for_options(options, args)
-    driver = webdriver.Edge(options=options)
-    driver.get(jxnu_url)
+    try:
+        options = webdriver.EdgeOptions()
+        args = ["--headless", "--no-proxy-server"]
+        add_args_for_options(options, args)
+        driver = webdriver.Edge(options=options)
+        driver.get(jxnu_url)
 
-    domain_select = {
-        '移动': '@cmcc',
-        '联通': '@cucc',
-        '电信': '@ctcc',
-        '校园带宽': '@jxnu'
-    }
-    domain_select = domain_select.get(domain)
-    assert domain_select, "运行商选择错误，请重新选择！"
-    domain = Select(driver.find_element("id", 'domain'))
-    domain.select_by_value(domain_select)
-    account = driver.find_element('id', 'username')
-    password = driver.find_element('id', 'password')
-    submit = driver.find_element('id', 'login-account')
+        domain_select = {
+            '移动': '@cmcc',
+            '联通': '@cucc',
+            '电信': '@ctcc',
+            '校园带宽': '@jxnu'
+        }
+        domain_select = domain_select.get(domain)
+        assert domain_select, "运行商选择错误，请重新选择！"
+        domain = Select(driver.find_element("id", 'domain'))
+        domain.select_by_value(domain_select)
+        account = driver.find_element('id', 'username')
+        password = driver.find_element('id', 'password')
+        submit = driver.find_element('id', 'login-account')
 
-    account.send_keys(user_account)
-    password.send_keys(user_password)
-    submit.click()
-    time.sleep(1)
-    driver.close()
+        account.send_keys(user_account)
+        password.send_keys(user_password)
+        submit.click()
+        time.sleep(1)
+        driver.close()
+        return True
+    except Exception as err:
+        debug(err)
+        return False
 
 if __name__ == "__main__":
     account = "学号"
