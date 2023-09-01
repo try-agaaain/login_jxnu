@@ -31,7 +31,8 @@ def main(wifi_list, account, password, jxnu_url, domain):
         time.sleep(60)
 
 if __name__ == "__main__":
-    wifi_list = ["jxnu_stu", "4405", "X4408-AI"]    # 本机可连接的WIFI列表
+    # 之前连接过的可用WIFI，例如：["jxnu_stu_123", "4405", "X4408-AI"]，靠前的优先级更高
+    wifi_list = ["wifi_name1", "wifi_name2", "wifi_name3"] 
     account = "学号"
     password = "校园网密码"
     domain = "运营商"   # 移动|联通|电信|校园带宽

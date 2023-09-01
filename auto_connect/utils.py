@@ -11,14 +11,15 @@ from auto_connect import DEBUG_ENABLE
 
 def connect_to_wifi(wifi_name):
     result = subprocess.run("netsh wlan show network",
-                            shell=True, stdout=subprocess.PIPE, text=True)
+                            shell=True, stdout=subprocess.PIPE, 
+                            text=True, encoding="gbk")
     pattern = r'SSID[^:]+: (.+?)\n'
     wifi_list = re.findall(pattern, result.stdout)
     if wifi_name not in wifi_list:
         return False
     cmd = f"netsh wlan connect name={wifi_name}"
-    ret = subprocess.run(
-        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    ret = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, 
+                        stderr=subprocess.PIPE, encoding="gbk")
     time.sleep(5)   # 等待两秒，等待网络状态更新
     return True if ret.returncode == 0 else False
 
