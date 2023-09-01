@@ -12,7 +12,7 @@
 
 ### 🔧使用方式
 
-step1: 环境安装：
+step1: 环境安装(python3.9.13)：
 ```python
 git clone https://github.com/try-agaaain/login_jxnu.git
 pip install -r requirements.txt

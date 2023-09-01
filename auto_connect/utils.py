@@ -30,7 +30,7 @@ def get_time():
 
 
 def net_is_connected(test_address="http://example.com/"):
-    retries = Retry(connect=1, read=1, redirect=1)
+    retries = Retry(connect=5, read=2, redirect=5)
     http = PoolManager(retries=retries)
     try:
         http.request("GET", test_address, retries=False)
