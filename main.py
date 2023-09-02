@@ -1,8 +1,18 @@
 import time
 
-from auto_connect.utils import connect_to_wifi, get_time
+from auto_connect.utils import connect_to_wifi, get_time, get_wifi_list
 from auto_connect.utils import net_is_connected2 as net_is_connected
 from auto_connect.login import login
+
+def begin():
+    print(f"\n[{get_time()}] 可用的wifi列表：", end="\n")
+    for wifi in get_wifi_list():
+        print(f"{wifi:14s}", end="    ")
+    print(end="\n")
+    if net_is_connected:
+        print(f"[{get_time()}] 当前网络连接正常...", end="\n")
+    else:
+        print(f"[{get_time()}] 当前网络未连接...", end="\n")
 
 def main(wifi_list, account, password, jxnu_url, domain):
     if not net_is_connected():
@@ -17,17 +27,17 @@ def main(wifi_list, account, password, jxnu_url, domain):
                     elif login(account, password, jxnu_url, domain):
                         print(f"[{get_time()}] 已成功登录校园网...\n")
                     else:
-                        print(f"[{get_time()}] 未能成功连接网络，即将再次重试...\n")
+                        print(f"[{get_time()}] 未能成功连接网络，5秒后重试...\n")
                 else:
                     print(f"[{get_time()}] {wifi_name} 可用，测试网络是否连接...")
                 if net_is_connected():
                     print(f"[{get_time()}] 已成功连接网络...\n")
                     break
                 else:
-                    print(f"[{get_time()}] 未能成功连接网络，即将再次尝试...")
+                    print(f"[{get_time()}] 未能成功连接网络，5秒后重试...")
             else:
-                print(f"[{get_time()}] {wifi_name} 不可用，即将再次尝试...")
-                
+                print(f"[{get_time()}] {wifi_name} 不可用，5秒后重试...")
+            time.sleep(5)
     else:
         time.sleep(60)
 
@@ -38,6 +48,6 @@ if __name__ == "__main__":
     password = "校园网密码"
     domain = "运营商"   # 移动|联通|电信|校园带宽
     jxnu_url= "http://172.16.8.8/srun_portal_pc?ac_id=1&theme=pro"  # 校园网登录地址
-    print(f"[{get_time()}] 开始执行...")
+    begin()
     while True:
         main(wifi_list, account, password, jxnu_url, domain)

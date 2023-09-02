@@ -9,12 +9,23 @@ from urllib3.exceptions import HTTPError
 
 from auto_connect import DEBUG_ENABLE
 
-def connect_to_wifi(wifi_name):
+def get_wifi_list():
     result = subprocess.run("netsh wlan show network",
                             shell=True, stdout=subprocess.PIPE, 
                             text=True, encoding="gbk")
     pattern = r'SSID[^:]+: (.+?)\n'
     wifi_list = re.findall(pattern, result.stdout)
+    return wifi_list
+
+def get_avaliable_networks():
+    result = subprocess.run("netsh wlan show profile",
+                            shell=True, stdout=subprocess.PIPE, 
+                            text=True, encoding="gbk")
+    avaliable_wifi = result.stdout
+    return avaliable_wifi
+
+def connect_to_wifi(wifi_name):
+    wifi_list = get_avaliable_networks()
     if wifi_name not in wifi_list:
         return False
     cmd = f"netsh wlan connect name={wifi_name}"
@@ -64,5 +75,5 @@ def debug(info):
         print(f"[{get_time()}] debug: 出现如下错误\n{info}")
 
 if __name__ == "__main__":
-    net_is_connected2()
+    net_is_connected()
     # connect_to_wifi("jxnu_stu")

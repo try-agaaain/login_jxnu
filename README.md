@@ -46,7 +46,7 @@ python main.py
 
 + 创建快捷方式：在快捷方式的属性中设置运行命令；比如在我的电脑中，通过conda创建的环境中python解释器的路径为`D:\development\anaconda\envs\login\python.exe`，将这个工具放置在了`D:\coding\login_jxnu\main.py`中，可以将快捷方式的目标设置为命令：`D:\development\anaconda\envs\login\python.exe D:\coding\login_jxnu\main.py`，示意图如下：
 
-<img src="C:\Users\Administrator\Desktop\login_jxnu\images\README\image-20230901204406781.png" alt="image-20230901204406781" style="zoom:67%;" />
+<img src="./images/README/image-20230901204406781.png" alt="image-20230901204406781" style="zoom:67%;" />
 
 + bat文件：将上面的命令放在.bat文件中，在windows中双击可直接运行；
 
