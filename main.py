@@ -7,11 +7,15 @@ from auto_connect.login import login
 def begin(test_address = "http://www.baidu.com"):
     test_address_u = underline_text(test_address)
     fprint_info("可连接的wifi列表如下：")
-    for index, wifi in enumerate(get_wifi_list()):
-        print(f"{wifi:<15s}", end="  |  ")
-        if (index+1) % 4 == 0:
-            print(end="\n")
-    print(end="\n")
+    WIFIs = get_wifi_list()
+    if WIFIs != "err":
+        for index, wifi in enumerate(WIFIs):
+            print(f"{wifi:<15s}", end="  |  ")
+            if (index+1) % 4 == 0:
+                print(end="\n")
+        print(end="\n")
+    else:
+        print("<编码错误，无法显示>")
     if net_is_connected():
         fprint_info(f"测试地址 {test_address_u} 可正常访问，每60秒重复一次检测...")
     else:
@@ -32,6 +36,10 @@ def main(wifi_list, account, password, jxnu_url, domain,
                     elif login(account, password, jxnu_url, domain) and net_is_connected(test_address):
                         fprint_info(f"测试地址 {test_address_u} 可正常访问，已成功登录校园网...\n")
                     else:
+                    else:
+                        fprint_info(f"测试地址 {test_address_u} 访问失败，5秒后重试...\n")
+                else:
+                else:
                         fprint_info(f"测试地址 {test_address_u} 访问失败，5秒后重试...\n")
                 else:
                     fprint_info(f"{wifi_name} 可用，测试网络是否连接...")

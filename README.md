@@ -56,8 +56,9 @@ python main.py
 ### 🎬Screenshot
 
 <div align=center>
-<img src="./images/README/screenshot.png">
+<img src="./images/README/screenshot.png" width="800" height="320">
 </div>
+
 
 ### 👨‍🔧Notice
 

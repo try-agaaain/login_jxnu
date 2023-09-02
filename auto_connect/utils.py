@@ -4,7 +4,6 @@ import time
 import requests
 import os
 import sys
-import ctypes
 import subprocess
 
 from urllib3 import PoolManager, Retry
@@ -26,13 +25,17 @@ def run_command(cmd):
     current_directory = os.path.dirname(os.path.abspath(__file__))
     save_path = f"{current_directory}/temp.txt"
     ret = subprocess.run(f'{cmd} > {save_path}', shell=True)
-    with open(save_path, 'r') as file:
-        output = file.read()
-    return ret.returncode, output
-
+    try:
+        with open(save_path, 'r') as file:
+            output = file.read()
+        return ret.returncode, output
+    except UnicodeDecodeError as _:
+        return ret.returncode, "err"
 
 def get_wifi_list():
     _, output = run_command("netsh wlan show networks")
+    if output is "err":
+        return "err"
     pattern = r'SSID[^:]+: (.+?)\n'
     wifi_list = re.findall(pattern, output)
     return wifi_list
