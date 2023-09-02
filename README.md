@@ -19,7 +19,7 @@ git clone https://github.com/try-agaaain/login_jxnu.git
 pip install -r requirements.txt
 ```
 **step2:** 安装edgedirver
-由于这个工具是使用selenium模拟浏览器进行登录的，所以需要有一个浏览器辅助工具：从设置中找到Edge的版本号(edge://settings/help)，再从[Microsoft Edge WebDriver - Microsoft Edge Developer](https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/)找到对应版本的EdgeDriver，并将其路径添加到环境变量中。
+由于这个工具是使用selenium模拟浏览器进行登录的，所以需要有一个浏览器辅助工具：从设置中找到Edge的版本号(edge://settings/help)，再从[Microsoft Edge WebDriver - Microsoft Edge Developer](https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/)找到对应版本的EdgeDriver，并将其路径添加到环境变量中。（添加环境变量后需重启或在cmd中通过`set PATH=C`使其生效）
 
 **step3:** 在main.py中设置校园网信息：可重连的WIFI列表、学号、校园网密码、运营商、校园网登录地址
 
@@ -48,15 +48,18 @@ python main.py
 
 
 <div align=center>
-<img src="./images/README/image-20230901204406781.png" width="300" height="225">
+<img src="./images/README/shortcut.png" width="300" height="225">
 </div>
 
 + bat文件：将上面的命令放在.bat文件中，在windows中双击可直接运行；
+
+### 🎬Screenshot
+
+<div align=center>
+<img src="./images/README/screenshot.png">
+</div>
 
 ### 👨‍🔧Notice
 
 + 目前只支持windows，网络的连接使用的是windows中的netsh命令完成的，然后再用selenium进行校园网登录；不过改一下连接命令也能用于Linux；
 + 目前在selenium模拟登录的过程中使用的是Edge浏览器，暂时没有去管别的浏览器；如需使用其他浏览器可修改`auto_connect\login.py`中Edge相关的那两行代码；
-
-
-

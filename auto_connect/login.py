@@ -58,7 +58,7 @@ def login(user_account, user_password, jxnu_url, domain='移动'):
         account.send_keys(user_account)
         password.send_keys(user_password)
         submit.click()
-        time.sleep(1)
+        # time.sleep(1)
         driver.close()
         return True
     except Exception as err:

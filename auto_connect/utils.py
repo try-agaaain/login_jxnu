@@ -3,7 +3,6 @@ import subprocess
 import time
 import requests
 
-
 from urllib3 import PoolManager, Retry
 from urllib3.exceptions import HTTPError
 
@@ -35,10 +34,10 @@ def connect_to_wifi(wifi_name):
     return True if ret.returncode == 0 else False
 
 
-def get_time():
+def fprint_info(info, end="\n"):
     time_info = time.localtime(time.time())
     cur_time = time.strftime("%Y-%m-%d %H:%M:%S", time_info)
-    return cur_time
+    print(f"【{cur_time}】 {info}", end=end)
 
 
 def net_is_connected(test_address="http://example.com/"):
