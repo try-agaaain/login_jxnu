@@ -56,7 +56,7 @@ python main.py
 ### 👨‍🔧Notice
 
 + 目前只支持windows，网络的连接使用的是windows中的netsh命令完成的，然后再用selenium进行校园网登录；不过改一下连接命令也能用于Linux；
-+ 目前在selenium模拟登录的过程中使用的是Edge浏览器，暂时没有去管别的浏览器；需要使用其他浏览器需要改一下`auto_connect\login.py`中Edge相关的那两行代码；
++ 目前在selenium模拟登录的过程中使用的是Edge浏览器，暂时没有去管别的浏览器；如需使用其他浏览器可修改`auto_connect\login.py`中Edge相关的那两行代码；
 
 
 
