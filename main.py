@@ -35,12 +35,6 @@ def main(wifi_list, account, password, jxnu_url, domain,
                         break
                     elif login(account, password, jxnu_url, domain) and net_is_connected(test_address):
                         fprint_info(f"测试地址 {test_address_u} 可正常访问，已成功登录校园网...\n")
-                    else:
-                    else:
-                        fprint_info(f"测试地址 {test_address_u} 访问失败，5秒后重试...\n")
-                else:
-                else:
-                        fprint_info(f"测试地址 {test_address_u} 访问失败，5秒后重试...\n")
                 else:
                     fprint_info(f"{wifi_name} 可用，测试网络是否连接...")
                 if net_is_connected(test_address):
