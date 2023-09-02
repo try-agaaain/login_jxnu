@@ -38,3 +38,24 @@ tmp_profile = iface.add_network_profile(profile)
 
 在第二种方式中，先尝试访问测试地址，如果访问失败，则认为网络断开了。在测试的时候遇到过一个问题：`HTTPSConnectionPool(host='baidu.com', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:1129)`。因为HTTPS是http over SSL，所以需要经过SSL认证，这里的测试地址是https://www.baidu.com，在没有网络的情况下访问可能会出现这个错误，于是将测试地址改为了http://example.com，这是一个常用的测试网站，然后安装了certifi包。但不确定是否解决了这个问题，后面这个问题自己消失了（有时候复现一个问题也挺麻烦的），就没去管了。
 
+### 运行结果的编码问题
+
+通过`subprocess.run`运行netsh获取网络信息时，需要对返回的结果解码，按理说使用和系统编码一致的方式解码就好了，但却经常出现问题。使用`chcp`查看系统编码方式是`gbk`的，但用于解码返回结果时却出现如下错误：
+```
+result = subprocess.run("netsh wlan show network",
+                            shell=True, stdout=subprocess.PIPE, 
+                            text=True, encoding='gbk')
+Traceback (most recent call last):
+  File "c:\Users\Administrator\Desktop\login_jxnu\try.py", line 4, in <module>
+    result = subprocess.run("netsh wlan show network",
+  File "D:\development\anaconda\envs\deep-todo\lib\subprocess.py", line 507, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+  File "D:\development\anaconda\envs\deep-todo\lib\subprocess.py", line 1121, in communicate
+    stdout = self.stdout.read()
+UnicodeDecodeError: 'gbk' codec can't decode byte 0xb5 in position 229: illegal multibyte sequence
+```
+即使换成`utf-8`有时也会出错，这个问题很不稳定，有时正常有时出错。
+
+后面的一个做法是先不对结果进行解码，将返回结果存放在一个临时文件中，然后从文件中读取结果，但打开文件的过程中其实也需要进行对文件内容进行解码，比如open(file_name, encoding="utf-8")，省略encoding参数时会使用默认的方式解码。
+
+不管怎么做，都要经过解码过程，而合适的解码方式又是不确定的，使得这个问题暂时没法解决。

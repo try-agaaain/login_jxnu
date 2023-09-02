@@ -1,44 +1,47 @@
 import time
 
-from auto_connect.utils import connect_to_wifi, fprint_info, get_wifi_list
+from auto_connect.utils import underline_text, connect_to_wifi, fprint_info, get_wifi_list
 from auto_connect.utils import net_is_connected2 as net_is_connected
 from auto_connect.login import login
 
-def begin():
-    fprint_info("检测出可用wifi列表如下：")
+def begin(test_address = "http://www.baidu.com"):
+    test_address_u = underline_text(test_address)
+    fprint_info("可连接的wifi列表如下：")
     for index, wifi in enumerate(get_wifi_list()):
         print(f"{wifi:<15s}", end="  |  ")
         if (index+1) % 4 == 0:
             print(end="\n")
     print(end="\n")
     if net_is_connected():
-        fprint_info("当前网络连接正常...")
+        fprint_info(f"测试地址 {test_address_u} 可正常访问，每60秒重复一次检测...")
     else:
-        fprint_info("当前网络未连接...")
+        fprint_info(f"测试地址 {test_address_u} 访问失败，当前网络未连接...")
 
-def main(wifi_list, account, password, jxnu_url, domain):
-    if not net_is_connected():
+def main(wifi_list, account, password, jxnu_url, domain,
+                    test_address = "http://www.baidu.com"):
+    test_address_u = underline_text(test_address)
+    if not net_is_connected(test_address):
         for wifi_name in wifi_list:
             fprint_info(f"网络已断开，尝试连接{wifi_name}...")
             if connect_to_wifi(wifi_name):
                 if "jxnu_stu" in wifi_name:
                     fprint_info(f"{wifi_name} 可用，正在登录校园网...")
-                    if net_is_connected():
-                        fprint_info("已成功连接网络...\n")
+                    if net_is_connected(test_address):
+                        fprint_info(f"测试地址 {test_address_u} 可正常访问，已成功登录校园网...\n")
                         break
-                    elif login(account, password, jxnu_url, domain):
-                        fprint_info("已成功登录校园网...\n")
+                    elif login(account, password, jxnu_url, domain) and net_is_connected(test_address):
+                        fprint_info(f"测试地址 {test_address_u} 可正常访问，已成功登录校园网...\n")
                     else:
-                        fprint_info("未能成功连接网络，5秒后重试...\n")
+                        fprint_info(f"测试地址 {test_address_u} 访问失败，5秒后重试...\n")
                 else:
                     fprint_info(f"{wifi_name} 可用，测试网络是否连接...")
-                if net_is_connected():
-                    fprint_info("已成功连接网络...\n")
+                if net_is_connected(test_address):
+                    fprint_info(f"测试地址 {test_address_u} 可正常访问，网络已连接...\n")
                     break
                 else:
-                    fprint_info("未能成功连接网络，5秒后重试...")
+                    fprint_info(f"测试地址 {test_address_u} 访问失败，5秒后重试...\n")
             else:
-                fprint_info(f"{wifi_name} 不可用，5秒后重试...")
+                fprint_info(f"测试地址 {test_address_u} 访问失败，5秒后重试...\n")
             time.sleep(5)
     else:
         time.sleep(60)

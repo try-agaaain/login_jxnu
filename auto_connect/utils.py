@@ -2,42 +2,68 @@ import re
 import subprocess
 import time
 import requests
+import os
+import sys
+import ctypes
+import subprocess
 
 from urllib3 import PoolManager, Retry
 from urllib3.exceptions import HTTPError
 
 from auto_connect import DEBUG_ENABLE
 
+# 处理命令运行过程中的编码问题：https://stackoverflow.com/a/67778646/22487325
+def run_command_deprecated(cmd):
+    sys.stdin.reconfigure(encoding='utf-8')
+    sys.stdout.reconfigure(encoding='utf-8')
+    sys.stderr.reconfigure(encoding='utf-8')
+    command = f"Set PYTHONUTF8=1 & {cmd}"
+    result = subprocess.run(
+        command, stdout=subprocess.PIPE, shell=True, encoding="utf-8")
+    return result
+
+def run_command(cmd):
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    save_path = f"{current_directory}/temp.txt"
+    ret = subprocess.run(f'{cmd} > {save_path}', shell=True)
+    with open(save_path, 'r') as file:
+        output = file.read()
+    return ret.returncode, output
+
+
 def get_wifi_list():
-    result = subprocess.run("netsh wlan show network",
-                            shell=True, stdout=subprocess.PIPE, 
-                            text=True, encoding="gbk")
+    _, output = run_command("netsh wlan show networks")
     pattern = r'SSID[^:]+: (.+?)\n'
-    wifi_list = re.findall(pattern, result.stdout)
+    wifi_list = re.findall(pattern, output)
     return wifi_list
 
+
 def get_avaliable_networks():
-    result = subprocess.run("netsh wlan show profile",
-                            shell=True, stdout=subprocess.PIPE, 
-                            text=True, encoding="gbk")
-    avaliable_wifi = result.stdout
+    _, avaliable_wifi = run_command("netsh wlan show profile")
     return avaliable_wifi
+
 
 def connect_to_wifi(wifi_name):
     wifi_list = get_avaliable_networks()
     if wifi_name not in wifi_list:
         return False
     cmd = f"netsh wlan connect name={wifi_name}"
-    ret = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, 
-                        stderr=subprocess.PIPE, encoding="gbk")
+    returncode, _ = run_command(cmd)
     time.sleep(5)   # 等待两秒，等待网络状态更新
-    return True if ret.returncode == 0 else False
+    return True if returncode == 0 else False
 
 
 def fprint_info(info, end="\n"):
+    # 处理escape sequence失效的问题：https://stackoverflow.com/a/77027374/22487325
+    os.system("")
     time_info = time.localtime(time.time())
     cur_time = time.strftime("%Y-%m-%d %H:%M:%S", time_info)
-    print(f"【{cur_time}】 {info}", end=end)
+    print(f"\033[1m[{cur_time}]\033[0m {info}", end=end)
+
+
+def underline_text(info):
+    os.system("")
+    return f"\033[4m{info}\033[0m"
 
 
 def net_is_connected(test_address="http://example.com/"):
@@ -51,10 +77,11 @@ def net_is_connected(test_address="http://example.com/"):
         return False
 
 
-def net_is_connected2(test_address="http://example.com/"):
+def net_is_connected2(test_address1="http://www.baidu.com/"):
     requests.DEFAULT_RETRIES = 1
     try:
-        res = requests.request("GET", test_address, verify=False, allow_redirects=False)
+        res = requests.request("GET", test_address1,
+                               verify=False, allow_redirects=False)
         if res.status_code == 200:
             return True
         return False
@@ -69,10 +96,12 @@ def net_is_connected3(test_domain='baidu.com'):
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return True if ret.returncode == 0 else False
 
+
 def debug(info):
     if DEBUG_ENABLE:
-        print(f"[{get_time()}] debug: 出现如下错误\n{info}")
+        fprint_info(f"debug: 出现如下错误\n{info}")
+
 
 if __name__ == "__main__":
-    net_is_connected()
+    net_is_connected2()
     # connect_to_wifi("jxnu_stu")
