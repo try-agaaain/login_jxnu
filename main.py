@@ -1,6 +1,7 @@
 import time
 
-from auto_connect.utils import net_is_connected, connect_to_wifi, get_time
+from auto_connect.utils import connect_to_wifi, get_time
+from auto_connect.utils import net_is_connected2 as net_is_connected
 from auto_connect.login import login
 
 def main(wifi_list, account, password, jxnu_url, domain):

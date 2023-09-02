@@ -44,8 +44,10 @@ def net_is_connected(test_address="http://example.com/"):
 def net_is_connected2(test_address="http://example.com/"):
     requests.DEFAULT_RETRIES = 1
     try:
-        requests.request("GET", test_address, verify=False)
-        return True
+        res = requests.request("GET", test_address, verify=False, allow_redirects=False)
+        if res.status_code == 200:
+            return True
+        return False
     except Exception as err:
         debug(err)
         return False
@@ -62,5 +64,5 @@ def debug(info):
         print(f"[{get_time()}] debug: 出现如下错误\n{info}")
 
 if __name__ == "__main__":
-    net_is_connected()
+    net_is_connected2()
     # connect_to_wifi("jxnu_stu")
