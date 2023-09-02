@@ -12,16 +12,16 @@
 
 ### 🔧使用方式
 
-**step1：**环境安装(python3.9.13)：
+**step1:** 环境安装(python3.9.13)：
 
 ```python
 git clone https://github.com/try-agaaain/login_jxnu.git
 pip install -r requirements.txt
 ```
-**step2：**安装edgedirver
+**step2:** 安装edgedirver
 由于这个工具是使用selenium模拟浏览器进行登录的，所以需要有一个浏览器辅助工具：从设置中找到Edge的版本号(edge://settings/help)，再从[Microsoft Edge WebDriver - Microsoft Edge Developer](https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/)找到对应版本的EdgeDriver，并将其路径添加到环境变量中。
 
-**step3：**在main.py中设置校园网信息：可重连的WIFI列表、学号、校园网密码、运营商、校园网登录地址
+**step3:** 在main.py中设置校园网信息：可重连的WIFI列表、学号、校园网密码、运营商、校园网登录地址
 
 ```python
 # 之前连接过的可用WIFI，例如：["jxnu_stu_123", "4405", "X4408-AI"]，靠前的优先级更高
@@ -34,7 +34,7 @@ jxnu_url= "http://172.16.8.8/srun_portal_pc?ac_id=1&theme=pro"  # 校园网登�
 
 > wifi_list中的WIFI需要是之前连接过的（即不是第一次连接），工具在尝试重连时，会优先尝试wifi_list中靠前的WIFI。
 
-**step4：**运行
+**step4:** 运行
 
 ```python
 python main.py
@@ -45,8 +45,7 @@ python main.py
 这个工具没有设计UI界面，每次运行需要输入命令会比较麻烦，有两种便捷方式：
 
 + 创建快捷方式：在快捷方式的属性中设置运行命令；比如在我的电脑中，通过conda创建的环境中python解释器的路径为`D:\development\anaconda\envs\login\python.exe`，将这个工具放置在了`D:\coding\login_jxnu\main.py`中，可以将快捷方式的目标设置为命令：`D:\development\anaconda\envs\login\python.exe D:\coding\login_jxnu\main.py`，示意图如下：
-
-<img src="./images/README/image-20230901204406781.png" alt="image-20230901204406781" style="zoom:67%;" />
+![contents](./images/README/image-20230901204406781.png)
 
 + bat文件：将上面的命令放在.bat文件中，在windows中双击可直接运行；
 
