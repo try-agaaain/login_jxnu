@@ -26,17 +26,19 @@ def run_command(cmd):
     save_path = f"{current_directory}/temp.txt"
     ret = subprocess.run(f'{cmd} > {save_path}', shell=True)
     try:
-        with open(save_path, 'r') as file:
+        with open(save_path, 'r', encoding='gbk') as file:
             output = file.read()
         return ret.returncode, output
     except UnicodeDecodeError as _:
-        return ret.returncode, "err"
+        return ret.returncode, None
 
 def get_wifi_list():
     _, output = run_command("netsh wlan show networks")
-    if output is "err":
-        return "err"
+    # 当出现编码错误时，output 为 None
+    if output is None:
+        return None
     pattern = r'SSID[^:]+: (.+?)\n'
+    # 当没有匹配内容时，wifi_list 为 []
     wifi_list = re.findall(pattern, output)
     return wifi_list
 
@@ -47,9 +49,9 @@ def get_avaliable_networks():
 
 
 def connect_to_wifi(wifi_name):
-    wifi_list = get_avaliable_networks()
-    if wifi_name not in wifi_list:
-        return False
+    wifi_list = get_wifi_list()
+    if wifi_list is not None and wifi_name not in wifi_list:
+            return False
     cmd = f"netsh wlan connect name={wifi_name}"
     returncode, _ = run_command(cmd)
     time.sleep(5)   # 等待两秒，等待网络状态更新

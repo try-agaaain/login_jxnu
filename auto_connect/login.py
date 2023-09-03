@@ -4,7 +4,7 @@ from selenium.webdriver.support.ui import Select
 from selenium import webdriver
 from selenium import webdriver
 
-from auto_connect.utils import debug
+from auto_connect.utils import debug, connect_to_wifi
 
 def add_args_for_options(options, args):
     for arg in args:
@@ -33,14 +33,15 @@ def check_avaliable_browser(args):
             except Exception as _:
                 return None
 
-def login(user_account, user_password, jxnu_url, domain='移动'):
+def login(wifi_name, user_account, user_password, jxnu_url, domain='移动'):
     try:
         options = webdriver.EdgeOptions()
-        args = ["--headless", "--no-proxy-server", "--log-level=3"]
+        args = ["--no-proxy-server", "--log-level=3"]
         add_args_for_options(options, args)
         driver = webdriver.Edge(options=options)
+        # connect_to_wifi(wifi_name)
         driver.get(jxnu_url)
-        time.sleep(1)
+        time.sleep(2)
         domain_select = {
             '移动': '@cmcc',
             '联通': '@cucc',
@@ -58,6 +59,7 @@ def login(user_account, user_password, jxnu_url, domain='移动'):
         account.send_keys(user_account)
         password.send_keys(user_password)
         submit.click()
+        time.sleep(2)   # 等待完成
         driver.close()
         return True
     except Exception as err:
