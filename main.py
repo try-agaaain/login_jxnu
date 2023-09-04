@@ -1,7 +1,7 @@
 import time
 
 from auto_connect.utils import underline_text, connect_to_wifi, fprint_info, get_wifi_list
-from auto_connect.utils import net_is_connected2 as net_is_connected
+from auto_connect.utils import net_is_connected2 as net_is_connected, bold_text, ellipsis
 from auto_connect.login import login
 
 def begin(test_address = "http://www.baidu.com"):
@@ -10,16 +10,16 @@ def begin(test_address = "http://www.baidu.com"):
     WIFIs = get_wifi_list()
     if WIFIs is not None:
         for index, wifi in enumerate(WIFIs):
-            print(f"{wifi:<15s}", end="  |  ")
+            print(f"{ellipsis(wifi):<16s}", end="  |  ")
             if (index+1) % 4 == 0:
                 print(end="\n")
         print(end="\n")
     else:
-        print("<编码错误，无法显示>")
+        print(bold_text("<字节解码错误，无法显示>"))
     if net_is_connected():
-        fprint_info(f"测试地址 {test_address_u} 可正常访问，每60秒重复一次检测...")
+        fprint_info(f"测试地址 {test_address_u} 可正常访问，每60秒重复一次检测...\n")
     else:
-        fprint_info(f"测试地址 {test_address_u} 访问失败，当前网络未连接...")
+        fprint_info(f"测试地址 {test_address_u} 访问失败，当前网络未连接...\n")
 
 def main(wifi_list, account, password, jxnu_url, domain,
                     test_address = "http://www.baidu.com"):

@@ -26,8 +26,8 @@ def run_command(cmd):
     save_path = f"{current_directory}/temp.txt"
     ret = subprocess.run(f'{cmd} > {save_path}', shell=True)
     try:
-        with open(save_path, 'r', encoding='gbk') as file:
-            output = file.read()
+        with open(save_path, 'rb') as file:
+            output = file.read().decode('utf-8', errors='ignore')
         return ret.returncode, output
     except UnicodeDecodeError as _:
         return ret.returncode, None
@@ -37,7 +37,7 @@ def get_wifi_list():
     # 当出现编码错误时，output 为 None
     if output is None:
         return None
-    pattern = r'SSID[^:]+: (.+?)\n'
+    pattern = r'SSID[^:]+: ([^\\ \r]+)'
     # 当没有匹配内容时，wifi_list 为 []
     wifi_list = re.findall(pattern, output)
     return wifi_list
@@ -59,17 +59,24 @@ def connect_to_wifi(wifi_name):
 
 
 def fprint_info(info, end="\n"):
-    # 处理escape sequence失效的问题：https://stackoverflow.com/a/77027374/22487325
-    os.system("")
     time_info = time.localtime(time.time())
     cur_time = time.strftime("%Y-%m-%d %H:%M:%S", time_info)
-    print(f"\033[1m[{cur_time}]\033[0m {info}", end=end)
+    print(f"[{bold_text(cur_time)}] {info}", end=end)
 
 
-def underline_text(info):
+def underline_text(text):
     os.system("")
-    return f"\033[4m{info}\033[0m"
+    return f"\033[4m{text}\033[0m"
 
+def bold_text(text):
+    # 处理escape sequence失效的问题：https://stackoverflow.com/a/77027374/22487325
+    os.system("")
+    return f"\033[1m{text}\033[0m"
+
+def ellipsis(text):
+    if len(text) > 16:
+        text = text[:13] + "..."
+    return text
 
 def net_is_connected(test_address="http://example.com/"):
     retries = Retry(connect=5, read=2, redirect=5)
