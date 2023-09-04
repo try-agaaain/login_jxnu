@@ -29,12 +29,13 @@ def main(wifi_list, account, password, jxnu_url, domain,
             fprint_info(f"网络已断开，尝试连接 {wifi_name}...")
             if connect_to_wifi(wifi_name):
                 if "jxnu_stu" in wifi_name:
-                    fprint_info(f"已应用 {wifi_name} 的缓存配置文件 ，正在登录校园网...")
+                    fprint_info(f"{wifi_name} 可用，正在登录校园网...")
                     if net_is_connected(test_address):
                         fprint_info(f"测试地址 {test_address_u} 可正常访问，已成功登录校园网...\n")
                         break
                     elif login(wifi_name, account, password, jxnu_url, domain) and net_is_connected(test_address):
                         fprint_info(f"测试地址 {test_address_u} 可正常访问，已成功登录校园网...\n")
+                        break
                 else:
                     fprint_info(f"{wifi_name} 可用，测试网络是否连接...")
                 if net_is_connected(test_address):

@@ -36,7 +36,7 @@ def check_avaliable_browser(args):
 def login(wifi_name, user_account, user_password, jxnu_url, domain='移动'):
     try:
         options = webdriver.EdgeOptions()
-        args = ["--no-proxy-server", "--log-level=3"]
+        args = ["--headless", "--no-proxy-server", "--log-level=3"]
         add_args_for_options(options, args)
         driver = webdriver.Edge(options=options)
         # connect_to_wifi(wifi_name)
